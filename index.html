@@ -15,7 +15,7 @@
 
       <section
         id="notesContainer"
-        class="grid grid-cols-1 gap-4 py-5 sm:grid-cols-2 lg:grid-cols-3"
+        class="absolute grid grid-cols-1 gap-4 py-5 sm:grid-cols-2 lg:grid-cols-3"
       >
         <div
           class="w-full min-h-[120px] p-5 bg-[#121212] rounded-md hover:bg-[#1a1a1a] transition-colors"
@@ -45,7 +45,9 @@
     >
       <div class="p-6">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-purple-500">Nueva Nota</h2>
+          <h2 id="headerDialog" class="text-2xl font-bold text-purple-500">
+            Nueva Nota
+          </h2>
           <button
             id="btnClose"
             class="text-gray-400 hover:text-white transition-colors text-2xl leading-none"
