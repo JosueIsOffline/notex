@@ -113,6 +113,7 @@ const deleteNote = (id) => {
 
   notes = notes.filter((note) => note.id !== id);
   saveNotes();
+  renderNotes();
 };
 
 // Initialize on load
