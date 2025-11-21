@@ -65,6 +65,13 @@ const addNote = () => {
   noteForm.reset();
 };
 
+// Delete note
+const deleteNote = (id) => {
+  if (!id) throw new Error("Should provide an id");
+  notes.filter((note) => note.id !== id);
+  saveNotes();
+};
+
 // Initialize on load
 document.addEventListener("DOMContentLoaded", () => {
   loadNotes();
