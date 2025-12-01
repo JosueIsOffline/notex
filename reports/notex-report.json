@@ -1,0 +1,603 @@
+{
+  "stats": {
+    "suites": 6,
+    "tests": 10,
+    "passes": 10,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-12-01T05:04:13.702Z",
+    "end": "2025-12-01T05:04:30.709Z",
+    "duration": 17007,
+    "testsRegistered": 10,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "9f22d406-a3fc-4762-9bed-3937af68ded8",
+      "title": "",
+      "fullFile": "",
+      "file": "",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "5dcd8ebe-d726-42c9-81ad-ad2f7c297d64",
+          "title": "Historia 1 - Creación de Notas",
+          "fullFile": "/Users/josueisoffline/Documents/GitHub/notex/test/create.test.js",
+          "file": "/test/create.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Historia 1 - Creación de Notas\"",
+              "fullTitle": "Historia 1 - Creación de Notas \"before each\" hook in \"Historia 1 - Creación de Notas\"",
+              "timedOut": false,
+              "duration": 599,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "this.timeout(10000);\ndriver = await buildDriver(true);\nawait driver.get(BASE_URL);\nawait clearLocalStorage(driver);",
+              "err": {},
+              "uuid": "9035f615-4620-44a1-9681-424bb84221d7",
+              "parentUUID": "5dcd8ebe-d726-42c9-81ad-ad2f7c297d64",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after each\" hook in \"Historia 1 - Creación de Notas\"",
+              "fullTitle": "Historia 1 - Creación de Notas \"after each\" hook in \"Historia 1 - Creación de Notas\"",
+              "timedOut": false,
+              "duration": 78,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await takeScreenshot(driver, `after-${this.currentTest.title}`);\nawait driver.quit();",
+              "err": {},
+              "uuid": "84e80b95-c81d-43c5-a5bd-ce32a5bcbbda",
+              "parentUUID": "5dcd8ebe-d726-42c9-81ad-ad2f7c297d64",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "Camino feliz: crear nota con título y contenido",
+              "fullTitle": "Historia 1 - Creación de Notas Camino feliz: crear nota con título y contenido",
+              "timedOut": false,
+              "duration": 122,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// Abrir modal\nawait driver\n  .wait(\n    until.elementLocated(\n      By.xpath(\"//button[@id='btnAdd' or contains(text(),'Add note')]\"),\n    ),\n    5000,\n  )\n  .then((el) => el.click());\n// Esperar modal\nawait driver.wait(\n  until.elementLocated(\n    By.xpath(\"//h2[contains(text(),'Crear') or contains(text(),'Nueva')]\"),\n  ),\n  5000,\n);\n// Inputs reales\nconst titleInput = await driver.findElement(By.id(\"noteTitle\"));\nconst contentInput = await driver.findElement(By.id(\"noteContent\"));\nawait titleInput.sendKeys(\"Prueba Selenium\");\nawait contentInput.sendKeys(\"Contenido de la nota automatizada\");\nconst saveBtn = await driver.findElement(By.id(\"btnSave\"));\nawait saveBtn.click();\n// Validar que la nota aparece en pantalla\nconst noteTitle = await driver.wait(\n  until.elementLocated(\n    By.xpath(\n      \"//p[contains(@class,'font-semibold') and contains(text(),'Prueba Selenium')]\",\n    ),\n  ),\n  5000,\n);\nconst noteContent = await driver.findElement(\n  By.xpath(\"//p[contains(text(),'Contenido de la nota automatizada')]\"),\n);\nexpect(await noteTitle.getText()).to.include(\"Prueba Selenium\");\nexpect(await noteContent.getText()).to.include(\n  \"Contenido de la nota automatizada\",\n);\n// Validar que se guardó en localStorage\nconst raw = await driver.executeScript(\n  \"return window.localStorage.getItem('notes');\",\n);\nexpect(raw).to.be.a(\"string\");\nexpect(raw).to.include(\"Prueba Selenium\");",
+              "err": {},
+              "uuid": "f1d32376-1b5a-4ee9-b2bc-59a817585476",
+              "parentUUID": "5dcd8ebe-d726-42c9-81ad-ad2f7c297d64",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Negativa: no permite crear sin título",
+              "fullTitle": "Historia 1 - Creación de Notas Negativa: no permite crear sin título",
+              "timedOut": false,
+              "duration": 87,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// Abrir modal\nawait driver.findElement(By.id(\"btnAdd\")).click();\n// Completar solo contenido\nawait driver\n  .findElement(By.id(\"noteContent\"))\n  .sendKeys(\"Solo contenido sin título\");\nawait driver.findElement(By.id(\"btnSave\")).click();\n// Modal NO debe cerrarse\nconst modalStillOpen = await driver.findElements(\n  By.xpath(\"//h2[contains(text(),'Crear') or contains(text(),'Nueva')]\"),\n);\nexpect(modalStillOpen.length).to.be.greaterThan(0);",
+              "err": {},
+              "uuid": "5fc9d01e-8f11-4479-846f-839da0130117",
+              "parentUUID": "5dcd8ebe-d726-42c9-81ad-ad2f7c297d64",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Prueba de límites: no guarda si el usuario escribe solo espacios",
+              "fullTitle": "Historia 1 - Creación de Notas Prueba de límites: no guarda si el usuario escribe solo espacios",
+              "timedOut": false,
+              "duration": 96,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// Abrir modal\nawait driver.findElement(By.id(\"btnAdd\")).click();\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"   \");\nawait driver.findElement(By.id(\"noteContent\")).sendKeys(\"   \");\nawait driver.findElement(By.id(\"btnSave\")).click();\n// Modal debe seguir abierto\nconst modalStillOpen = await driver.findElements(\n  By.xpath(\"//h2[contains(text(),'Crear') or contains(text(),'Nueva')]\"),\n);\nexpect(modalStillOpen.length).to.be.greaterThan(0);",
+              "err": {},
+              "uuid": "3a63d962-b247-4157-a77e-68c6fab5861f",
+              "parentUUID": "5dcd8ebe-d726-42c9-81ad-ad2f7c297d64",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "f1d32376-1b5a-4ee9-b2bc-59a817585476",
+            "5fc9d01e-8f11-4479-846f-839da0130117",
+            "3a63d962-b247-4157-a77e-68c6fab5861f"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 305,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 20000
+        },
+        {
+          "uuid": "d548e75e-4270-4e22-84ab-e7c86f756f85",
+          "title": "Historia 4 - Eliminación de Notas",
+          "fullFile": "/Users/josueisoffline/Documents/GitHub/notex/test/delete.test.js",
+          "file": "/test/delete.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Historia 4 - Eliminación de Notas\"",
+              "fullTitle": "Historia 4 - Eliminación de Notas \"before each\" hook in \"Historia 4 - Eliminación de Notas\"",
+              "timedOut": false,
+              "duration": 662,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "driver = await buildDriver(true);\nawait driver.get(BASE_URL);\nawait clearLocalStorage(driver);",
+              "err": {},
+              "uuid": "96b292fc-bfe3-4c08-9b6e-3fdc18dd2100",
+              "parentUUID": "d548e75e-4270-4e22-84ab-e7c86f756f85",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after each\" hook in \"Historia 4 - Eliminación de Notas\"",
+              "fullTitle": "Historia 4 - Eliminación de Notas \"after each\" hook in \"Historia 4 - Eliminación de Notas\"",
+              "timedOut": false,
+              "duration": 84,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await takeScreenshot(driver, `after-${this.currentTest.title}`);\nawait driver.quit();",
+              "err": {},
+              "uuid": "c43b3dda-f206-408d-849e-9d6815e7615f",
+              "parentUUID": "d548e75e-4270-4e22-84ab-e7c86f756f85",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "Eliminar nota existente",
+              "fullTitle": "Historia 4 - Eliminación de Notas Eliminar nota existente",
+              "timedOut": false,
+              "duration": 2154,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await driver\n  .wait(until.elementLocated(By.id(\"btnAdd\")), 5000)\n  .then((btn) => btn.click());\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota a eliminar\");\nawait driver\n  .findElement(By.id(\"noteContent\"))\n  .sendKeys(\"Contenido a eliminar\");\nawait driver.findElement(By.id(\"btnSave\")).click();\nconst noteDiv = await driver.findElement(\n  By.xpath(\n    \"//section[@id='notesContainer']/div[.//p[contains(text(),'Nota a eliminar')]]\",\n  ),\n);\nconst delBtn = await noteDiv.findElement(By.xpath(\".//button[text()='D']\"));\nawait delBtn.click();\nconst notes = await driver.findElements(\n  By.xpath(\n    \"//section[@id='notesContainer']/div[.//p[contains(text(),'Nota a eliminar')]]\",\n  ),\n);\nexpect(notes.length).to.equal(0);",
+              "err": {},
+              "uuid": "deea7a96-ec0e-471f-8f8d-ab39f2ddfa2e",
+              "parentUUID": "d548e75e-4270-4e22-84ab-e7c86f756f85",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "deea7a96-ec0e-471f-8f8d-ab39f2ddfa2e"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 2154,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 20000
+        },
+        {
+          "uuid": "bc4fa61a-83c7-473f-9fb1-7ff48694e9b2",
+          "title": "Historia 3 - Edición de Notas",
+          "fullFile": "/Users/josueisoffline/Documents/GitHub/notex/test/edit.test.js",
+          "file": "/test/edit.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Historia 3 - Edición de Notas\"",
+              "fullTitle": "Historia 3 - Edición de Notas \"before each\" hook in \"Historia 3 - Edición de Notas\"",
+              "timedOut": false,
+              "duration": 608,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "driver = await buildDriver(true);\nawait driver.get(BASE_URL);\nawait clearLocalStorage(driver);",
+              "err": {},
+              "uuid": "bb932485-5bbe-4fcc-a2da-08308c285fa5",
+              "parentUUID": "bc4fa61a-83c7-473f-9fb1-7ff48694e9b2",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after each\" hook in \"Historia 3 - Edición de Notas\"",
+              "fullTitle": "Historia 3 - Edición de Notas \"after each\" hook in \"Historia 3 - Edición de Notas\"",
+              "timedOut": false,
+              "duration": 75,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await takeScreenshot(driver, `after-${this.currentTest.title}`);\nawait driver.quit();",
+              "err": {},
+              "uuid": "afff60b9-2bbd-4c25-ba85-73063ca20ce9",
+              "parentUUID": "bc4fa61a-83c7-473f-9fb1-7ff48694e9b2",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "Editar nota existente",
+              "fullTitle": "Historia 3 - Edición de Notas Editar nota existente",
+              "timedOut": false,
+              "duration": 192,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// Crear nota inicial\nawait driver\n  .wait(until.elementLocated(By.id(\"btnAdd\")), 5000)\n  .then((btn) => btn.click());\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota Original\");\nawait driver\n  .findElement(By.id(\"noteContent\"))\n  .sendKeys(\"Contenido original\");\nawait driver.findElement(By.id(\"btnSave\")).click();\n// Editar la nota\nlet noteDiv = await driver.findElement(\n  By.xpath(\n    \"//section[@id='notesContainer']/div[.//p[contains(text(),'Nota Original')]]\",\n  ),\n);\nconst editBtn = await noteDiv.findElement(\n  By.xpath(\".//button[text()='E']\"),\n);\nawait editBtn.click();\nawait driver.findElement(By.id(\"noteTitle\")).clear();\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota Editada\");\nawait driver.findElement(By.id(\"noteContent\")).clear();\nawait driver\n  .findElement(By.id(\"noteContent\"))\n  .sendKeys(\"Contenido editado\");\nawait driver.findElement(By.id(\"btnSave\")).click();\n// Volver a buscar la nota después de guardar\nnoteDiv = await driver.findElement(\n  By.xpath(\n    \"//section[@id='notesContainer']/div[.//p[contains(text(),'Nota Editada')]]\",\n  ),\n);\nconst updatedTitle = await noteDiv.findElement(By.tagName(\"p\")).getText();\nexpect(updatedTitle).to.include(\"Nota Editada\");",
+              "err": {},
+              "uuid": "246e5bab-d980-47bd-8c0c-5e2978aac74c",
+              "parentUUID": "bc4fa61a-83c7-473f-9fb1-7ff48694e9b2",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "246e5bab-d980-47bd-8c0c-5e2978aac74c"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 192,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 20000
+        },
+        {
+          "uuid": "5c003826-05d9-4690-a5ca-51e95c3997bc",
+          "title": "Historia 5 - Cancelar y cerrar dialogo",
+          "fullFile": "/Users/josueisoffline/Documents/GitHub/notex/test/modal.test.js",
+          "file": "/test/modal.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Historia 5 - Cancelar y cerrar dialogo\"",
+              "fullTitle": "Historia 5 - Cancelar y cerrar dialogo \"before each\" hook in \"Historia 5 - Cancelar y cerrar dialogo\"",
+              "timedOut": false,
+              "duration": 585,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "driver = await buildDriver(true);\nawait driver.get(BASE_URL);\nawait clearLocalStorage(driver);",
+              "err": {},
+              "uuid": "6a769bd0-1f3e-4021-ae0e-2c8ed4b08b00",
+              "parentUUID": "5c003826-05d9-4690-a5ca-51e95c3997bc",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after each\" hook in \"Historia 5 - Cancelar y cerrar dialogo\"",
+              "fullTitle": "Historia 5 - Cancelar y cerrar dialogo \"after each\" hook in \"Historia 5 - Cancelar y cerrar dialogo\"",
+              "timedOut": false,
+              "duration": 85,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await takeScreenshot(driver, `after-${this.currentTest.title}`);\nawait driver.quit();",
+              "err": {},
+              "uuid": "ddc40534-a24f-4f4b-9fc1-14ccd5796536",
+              "parentUUID": "5c003826-05d9-4690-a5ca-51e95c3997bc",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "Cancelar creación de nota no agrega nada",
+              "fullTitle": "Historia 5 - Cancelar y cerrar dialogo Cancelar creación de nota no agrega nada",
+              "timedOut": false,
+              "duration": 2155,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await driver\n  .wait(until.elementLocated(By.id(\"btnAdd\")), 5000)\n  .then((btn) => btn.click());\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota Cancelada\");\nawait driver\n  .findElement(By.id(\"noteContent\"))\n  .sendKeys(\"Contenido Cancelado\");\nawait driver.findElement(By.id(\"btnCancel\")).click();\nconst notes = await driver.findElements(\n  By.xpath(\n    \"//section[@id='notesContainer']/div[.//p[contains(text(),'Nota Cancelada')]]\",\n  ),\n);\nexpect(notes.length).to.equal(0);",
+              "err": {},
+              "uuid": "affe573e-aa53-4f59-8741-2ed87e46ef81",
+              "parentUUID": "5c003826-05d9-4690-a5ca-51e95c3997bc",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Cerrar dialogo con X no agrega nada",
+              "fullTitle": "Historia 5 - Cancelar y cerrar dialogo Cerrar dialogo con X no agrega nada",
+              "timedOut": false,
+              "duration": 2135,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await driver\n  .wait(until.elementLocated(By.id(\"btnAdd\")), 5000)\n  .then((btn) => btn.click());\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota Cerrada\");\nawait driver\n  .findElement(By.id(\"noteContent\"))\n  .sendKeys(\"Contenido Cerrado\");\nawait driver.findElement(By.id(\"btnClose\")).click();\nconst notes = await driver.findElements(\n  By.xpath(\n    \"//section[@id='notesContainer']/div[.//p[contains(text(),'Nota Cerrada')]]\",\n  ),\n);\nexpect(notes.length).to.equal(0);",
+              "err": {},
+              "uuid": "6f275f75-bf40-48a0-a76b-decc92788345",
+              "parentUUID": "5c003826-05d9-4690-a5ca-51e95c3997bc",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "affe573e-aa53-4f59-8741-2ed87e46ef81",
+            "6f275f75-bf40-48a0-a76b-decc92788345"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 4290,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 20000
+        },
+        {
+          "uuid": "91200e4c-ce3e-460a-b33c-3a53deb35a90",
+          "title": "Historia 6 - Persistencia de Notas",
+          "fullFile": "/Users/josueisoffline/Documents/GitHub/notex/test/persistence.test.js",
+          "file": "/test/persistence.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Historia 6 - Persistencia de Notas\"",
+              "fullTitle": "Historia 6 - Persistencia de Notas \"before each\" hook in \"Historia 6 - Persistencia de Notas\"",
+              "timedOut": false,
+              "duration": 672,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "driver = await buildDriver(true);\nawait driver.get(BASE_URL);\nawait clearLocalStorage(driver);",
+              "err": {},
+              "uuid": "e7946d7f-873a-4f87-ac33-4a01e50afb96",
+              "parentUUID": "91200e4c-ce3e-460a-b33c-3a53deb35a90",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after each\" hook in \"Historia 6 - Persistencia de Notas\"",
+              "fullTitle": "Historia 6 - Persistencia de Notas \"after each\" hook in \"Historia 6 - Persistencia de Notas\"",
+              "timedOut": false,
+              "duration": 81,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await takeScreenshot(driver, `after-${this.currentTest.title}`);\nawait driver.quit();",
+              "err": {},
+              "uuid": "85b680da-5fce-42b6-a42a-36b476343ec6",
+              "parentUUID": "91200e4c-ce3e-460a-b33c-3a53deb35a90",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "Notas persisten en localStorage al recargar",
+              "fullTitle": "Historia 6 - Persistencia de Notas Notas persisten en localStorage al recargar",
+              "timedOut": false,
+              "duration": 131,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await driver\n  .wait(until.elementLocated(By.id(\"btnAdd\")), 5000)\n  .then((btn) => btn.click());\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota Persistente\");\nawait driver\n  .findElement(By.id(\"noteContent\"))\n  .sendKeys(\"Contenido Persistente\");\nawait driver.findElement(By.id(\"btnSave\")).click();\nawait driver.navigate().refresh();\nconst noteDiv = await driver.findElement(\n  By.xpath(\n    \"//section[@id='notesContainer']/div[.//p[contains(text(),'Nota Persistente')]]\",\n  ),\n);\nconst titleText = await noteDiv.findElement(By.tagName(\"p\")).getText();\nexpect(titleText).to.include(\"Nota Persistente\");\nconst raw = await driver.executeScript(\n  \"return window.localStorage.getItem('notes');\",\n);\nexpect(raw).to.be.a(\"string\");\nexpect(raw).to.include(\"Nota Persistente\");",
+              "err": {},
+              "uuid": "ddc21423-5151-4c60-af9e-bdcf51ba24b9",
+              "parentUUID": "91200e4c-ce3e-460a-b33c-3a53deb35a90",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "ddc21423-5151-4c60-af9e-bdcf51ba24b9"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 131,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 20000
+        },
+        {
+          "uuid": "c95f4342-e4c6-4fc9-b2d7-37f62726fa7e",
+          "title": "Historia 2 - Visualización de Notas",
+          "fullFile": "/Users/josueisoffline/Documents/GitHub/notex/test/view.test.js",
+          "file": "/test/view.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Historia 2 - Visualización de Notas\"",
+              "fullTitle": "Historia 2 - Visualización de Notas \"before each\" hook in \"Historia 2 - Visualización de Notas\"",
+              "timedOut": false,
+              "duration": 686,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "driver = await buildDriver(true);\nawait driver.get(BASE_URL);\nawait clearLocalStorage(driver);",
+              "err": {},
+              "uuid": "58456ad7-08e4-405a-8b52-e6a16e0af7c0",
+              "parentUUID": "c95f4342-e4c6-4fc9-b2d7-37f62726fa7e",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after each\" hook in \"Historia 2 - Visualización de Notas\"",
+              "fullTitle": "Historia 2 - Visualización de Notas \"after each\" hook in \"Historia 2 - Visualización de Notas\"",
+              "timedOut": false,
+              "duration": 84,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await takeScreenshot(driver, `after-${this.currentTest.title}`);\nawait driver.quit();",
+              "err": {},
+              "uuid": "6b20a9d4-2ee8-40c5-8664-5cd908484b3c",
+              "parentUUID": "c95f4342-e4c6-4fc9-b2d7-37f62726fa7e",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "Muestra notas en el grid y botones E/D",
+              "fullTitle": "Historia 2 - Visualización de Notas Muestra notas en el grid y botones E/D",
+              "timedOut": false,
+              "duration": 178,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await driver\n  .wait(until.elementLocated(By.id(\"btnAdd\")), 5000)\n  .then((btn) => btn.click());\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota 1\");\nawait driver.findElement(By.id(\"noteContent\")).sendKeys(\"Contenido 1\");\nawait driver.findElement(By.id(\"btnSave\")).click();\nawait driver\n  .wait(until.elementLocated(By.id(\"btnAdd\")), 5000)\n  .then((btn) => btn.click());\nawait driver.findElement(By.id(\"noteTitle\")).sendKeys(\"Nota 2\");\nawait driver.findElement(By.id(\"noteContent\")).sendKeys(\"Contenido 2\");\nawait driver.findElement(By.id(\"btnSave\")).click();\nawait driver.wait(\n  until.elementsLocated(\n    By.xpath(\"//section[@id='notesContainer']/div[.//p]\"),\n  ),\n  5000,\n);\nconst notes = await driver.findElements(\n  By.xpath(\"//section[@id='notesContainer']/div[.//p]\"),\n);\nexpect(notes.length).to.be.at.least(2);\nconst firstNote = notes[0];\nconst editBtns = await firstNote.findElements(\n  By.xpath(\".//button[text()='E']\"),\n);\nconst delBtns = await firstNote.findElements(\n  By.xpath(\".//button[text()='D']\"),\n);\nexpect(editBtns.length).to.be.greaterThan(0);\nexpect(delBtns.length).to.be.greaterThan(0);",
+              "err": {},
+              "uuid": "5cc9ddb5-43fc-479b-8b6b-431bc8dec4f4",
+              "parentUUID": "c95f4342-e4c6-4fc9-b2d7-37f62726fa7e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Si no hay notas sólo aparece Add note +",
+              "fullTitle": "Historia 2 - Visualización de Notas Si no hay notas sólo aparece Add note +",
+              "timedOut": false,
+              "duration": 2068,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// Limpiar localStorage y recargar\nawait driver.executeScript(\"window.localStorage.clear();\");\nawait driver.navigate().refresh();\n// Esperar que el botón Add note aparezca\nconst add = await driver.wait(\n  until.elementLocated(\n    By.xpath(\n      \"//button[contains(.,'Add note') or contains(.,'Add note +') or contains(.,'Agregar nota')]\",\n    ),\n  ),\n  5000,\n);\n// Contar solo notas con contenido\nconst notes = await driver.findElements(\n  By.xpath(\n    \"//div[contains(@class,'note') or contains(@class,'card')][.//p or .//strong]\",\n  ),\n);\nexpect(notes.length).to.equal(0);\nexpect(add).to.not.be.null; // El botón existe",
+              "err": {},
+              "uuid": "36936f88-cfe2-4451-a93b-0b951ae78919",
+              "parentUUID": "c95f4342-e4c6-4fc9-b2d7-37f62726fa7e",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "5cc9ddb5-43fc-479b-8b6b-431bc8dec4f4",
+            "36936f88-cfe2-4451-a93b-0b951ae78919"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 2246,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 20000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 20000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "11.7.5"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": true,
+        "reportFilename": "notex-report",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "reports",
+        "reportFilename": "notex-report",
+        "quiet": "true"
+      },
+      "version": "6.3.2"
+    }
+  }
+}

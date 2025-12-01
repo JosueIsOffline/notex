@@ -1,0 +1,7 @@
+node_modules/
+test-results/
+reports/screenshots/*.png
+chromedriver.exe
+geckodriver.exe
+*.log
+.DS_Store

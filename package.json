@@ -1,0 +1,32 @@
+{
+  "name": "notex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --timeout 20000 --reporter mochawesome --reporter-options reportDir=reports,reportFilename=notex-report,quiet=true",
+    "test:headed": "MOCHA_HEADLESS=false npm test",
+    "clean:reports": "rm -rf reports screenshots || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosueIsOffline/notex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JosueIsOffline/notex/issues"
+  },
+  "homepage": "https://github.com/JosueIsOffline/notex#readme",
+  "dependencies": {
+    "selenium-webdriver": "^4.38.0"
+  },
+  "devDependencies": {
+    "chai": "^6.2.1",
+    "chromedriver": "^142.0.3",
+    "mocha": "^11.7.5",
+    "mochawesome": "^7.1.4"
+  }
+}
